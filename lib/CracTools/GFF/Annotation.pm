@@ -82,7 +82,7 @@ package CracTools::GFF::Annotation;
   $CracTools::GFF::Annotation::DIST = 'CracTools';
 }
 # ABSTRACT: Parse GFF lines.
-$CracTools::GFF::Annotation::VERSION = '1.04';
+$CracTools::GFF::Annotation::VERSION = '1.08';
 use Carp;
 
 
@@ -91,7 +91,7 @@ sub new {
   my $line = shift;
   my $format = shift;
   if(!defined $format) {
-    $format = 'gff2';
+    $format = 'gff3';
   }
 
   my $self = bless {format => $format}, $class;
@@ -129,10 +129,12 @@ sub _init {
   my @attributes_tab = split(";",$attributes);
   foreach my $attr (@attributes_tab) {
     my ($k,$v);
-    if($self->{format} =~ /gff3/i) {
+    if($self->{format} =~ /gff3/i || $self->{format} =~ /gff$/i) {
       ($k,$v) = $attr =~ /(\S+)=(.*)/;
-    } else {
+    } elsif ($self->{format} =~ /gtf/i){
       ($k,$v) = $attr =~ /(\S+)\s+"(.*)"/;
+    }else{
+	croak "Missing format argument (gff3,gtf) in CracTools::GFF::Annotation constructor";
     }
     if(defined $k && defined $v) {
       $self->{attributes}{$k} = $v;
@@ -275,7 +277,7 @@ CracTools::GFF::Annotation - Parse GFF lines.
 
 =head1 VERSION
 
-version 1.04
+version 1.08
 
 =head1 SYNOPSIS
 
@@ -303,8 +305,8 @@ CracTools::GFF::Annotataion is an object to parse and access GFF line's fields.
 
   Arg [1] : String - $line
             GFF line
-  Arg [2] : String - $format (optional) - default 'gff2'
-            GFF format (gff2 or gff3)
+  Arg [2] : String - $format (optional) - default 'gff3'
+            GFF format (gtf or gff3)
 
   Example     : my $annotation = CracTools::GFF::Annotation->new($gff_line);
   Description : Create a new CracTools::GFF::Annotation object

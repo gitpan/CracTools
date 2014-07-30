@@ -82,7 +82,7 @@ package CracTools::SAMReader::SAMline;
   $CracTools::SAMReader::SAMline::DIST = 'CracTools';
 }
 # ABSTRACT: The object for manipulation a SAM line.
-$CracTools::SAMReader::SAMline::VERSION = '1.04';
+$CracTools::SAMReader::SAMline::VERSION = '1.08';
 use strict;
 use warnings;
 use Carp;
@@ -449,9 +449,9 @@ sub isClassified {
   } elsif($class eq "multiple") {
     return $self->{extended_fields}{XM};
   } elsif($class eq "normal") {
-    return $self->{extended_fields}{XN} == 1;
+    defined $self->{extended_fields}{XN} ? return $self->{extended_fields}{XN} == 1 : return undef;
   } elsif($class eq "almostNormal") {
-    return $self->{extended_fields}{XN} == 2;
+    defined $self->{extended_fields}{XN} ? return $self->{extended_fields}{XN} == 2 : return undef;
   } else {
     croak "Class argument ($class) does not match any case";
   }
@@ -461,7 +461,7 @@ sub isClassified {
 sub events {
   my $self = shift;
   my $event_type = shift;
-  $self->loadEvents($event_type);
+  $self->loadEvents();#$event_type);
   if(defined $self->{events}{$event_type}) {
     return $self->{events}{$event_type};
   } else {
@@ -474,9 +474,9 @@ sub loadEvents {
   my $self = shift;
   my $event_type_to_load = shift;
   ## TODO avoid double loading when doing lazy loading
-  if(defined $event_type_to_load && defined $self->{$event_type_to_load}{loaded}) {
-    return 0;
-  }
+  #if(defined $event_type_to_load && defined $self->{$event_type_to_load}{loaded}) {
+  #  return 0;
+  #}
   if(!defined $self->{events} && defined $self->{extended_fields}{XE}) { 
     # Init events
     my @events = split(";",$self->{extended_fields}{XE});
@@ -543,13 +543,13 @@ sub loadEvents {
         }
       }
     }
-    # If we have only load a specific event type
-    if(defined $event_type_to_load) {
-      $self->{$event_type_to_load}{loaded} = 1;
-    # Else we have load every events.
-    } else {
-      $self->{events}{loaded} = 1;
-    }
+    ## If we have only load a specific event type
+    #if(defined $event_type_to_load) {
+    #  $self->{$event_type_to_load}{loaded} = 1;
+    ## Else we have load every events.
+    #} else {
+    #  $self->{events}{loaded} = 1;
+    #}
   }
 }
 
@@ -720,7 +720,7 @@ CracTools::SAMReader::SAMline - The object for manipulation a SAM line.
 
 =head1 VERSION
 
-version 1.04
+version 1.08
 
 =head1 SYNOPSIS
 
@@ -833,7 +833,7 @@ because creating object in Perl can be long and useless for some purposes.
 
 =head2 line
 
-  Description : Getterr for the whole SAMline as a string.
+  Description : Getter for the whole SAMline as a string.
   ReturnType  : String
   Exceptions  : none
 

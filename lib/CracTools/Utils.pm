@@ -81,7 +81,7 @@ package CracTools::Utils;
   $CracTools::Utils::DIST = 'CracTools';
 }
 # ABSTRACT: A set of useful functions
-$CracTools::Utils::VERSION = '1.04';
+$CracTools::Utils::VERSION = '1.08';
 use strict;
 use warnings;
 
@@ -135,7 +135,7 @@ CracTools::Utils - A set of useful functions
 
 =head1 VERSION
 
-version 1.04
+version 1.08
 
 =head2 reverseComplement
 

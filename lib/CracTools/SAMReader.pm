@@ -82,7 +82,7 @@ package CracTools::SAMReader;
   $CracTools::SAMReader::DIST = 'CracTools';
 }
 # ABSTRACT: An easy to use tool to read files in SAM format.
-$CracTools::SAMReader::VERSION = '1.04';
+$CracTools::SAMReader::VERSION = '1.08';
 use strict;
 use warnings;
 use CracTools::SAMReader::SAMline;
@@ -253,7 +253,7 @@ CracTools::SAMReader - An easy to use tool to read files in SAM format.
 
 =head1 VERSION
 
-version 1.04
+version 1.08
 
 =head1 SYNOPSIS
 
